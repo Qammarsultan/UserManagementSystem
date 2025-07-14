@@ -1,0 +1,64 @@
+﻿@model IEnumerable<UserManagementSystem.Models.UserInfo>
+
+@{
+    ViewData["Title"] = "User List";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">User List</h2>
+        <a href="@Url.Action("CreateUser", "Account")" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Create User
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle table-borderless">
+            <thead class="text-muted bg-light">
+                <tr>
+                    <th>#</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Created</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr class="border-bottom">
+                        <td class="text-primary fw-bold">#@user.Id</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar rounded-circle bg-warning text-white me-2 text-center" style="width: 40px; height: 40px; line-height: 40px;">
+                                    @user.FullName.Substring(0, 1).ToUpper()
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">@user.FullName</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>@user.Email</td>
+                        <td>
+                            <div class="fw-semibold">@user.Role</div>
+                        </td>
+                        <td>@DateTime.Now.ToString("dd MMM yyyy")</td>
+                        <td class="text-end">
+                            <a href="@Url.Action("EditUser", "Account", new { id = user.Id })" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

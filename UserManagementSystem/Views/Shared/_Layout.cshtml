@@ -1,0 +1,107 @@
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - UserManagementSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/UserManagementSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-M6k3e2skx5/..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="border-end bg-light" id="sidebar-wrapper">
+            <div class="sidebar-heading border-bottom bg-white">UserManagementSystem</div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" asp-controller="Account" asp-action="CreateUser">Create User</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" asp-controller="Account" asp-action="GetUsersList">Users List</a>
+            </div>
+        </div>
+
+        <!-- Page content wrapper -->
+        <div id="page-content-wrapper">
+            <!-- Top navigation -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+                <div class="container-fluid">
+                    <button class="btn btn-primary" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+                    <form class="d-none d-md-inline-block form-inline ms-auto me-2">
+                        <div class="input-group">
+                            <input class="form-control" type="text" placeholder="Search..." aria-label="Search" />
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+
+
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">Hello, <strong>@User.FindFirst(ClaimTypes.Email)?.Value</strong></span>
+                            <form asp-controller="Register" asp-action="Logout" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">Hello, <strong>Guest</strong></span>
+                            <a asp-controller="Register" asp-action="Signin" class="btn btn-outline-primary btn-sm ms-2">Sign In</a>
+                        </div>
+                    }
+
+                </div>
+            </nav>
+
+            <!-- Page content -->
+            <div class="container-fluid mt-3">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted mt-4">
+        <div class="container">
+            &copy; 2025 - UserManagementSystem - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById("sidebarToggle").addEventListener("click", function () {
+            document.getElementById("wrapper").classList.toggle("toggled");
+        });
+    </script>
+    <style>
+        #wrapper {
+            display: flex;
+            width: 100%;
+        }
+
+        #sidebar-wrapper {
+            width: 250px;
+        }
+
+        #page-content-wrapper {
+            flex: 1;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+            margin-left: -250px;
+        }
+    </style>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

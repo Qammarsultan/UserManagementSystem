@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="alert alert-danger text-center shadow-lg rounded-4 p-5">
+                <h3><i class="fa fa-exclamation-triangle"></i> Something went wrong</h3>
+                <p class="lead mt-3">
+                    @TempData["ErrorMessage"] ?? "An unexpected error occurred while processing your request."
+                </p>
+                <a href="@Url.Action("GetUsersList", "Account")" class="btn btn-danger mt-4 px-4">
+                    <i class="fa fa-arrow-left"></i> Go Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

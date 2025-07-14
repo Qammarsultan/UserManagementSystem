@@ -1,0 +1,66 @@
+﻿@model UserManagementSystem.Models.UserRegister
+
+@{
+    Layout = null;
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - UserManagementSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/UserManagementSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-M6k3e2skx5/..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-header bg-primary text-white rounded-top-4">
+                    <h4 class="mb-0">Signup here</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Signup" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="UserName" class="form-label fw-bold"></label>
+                            <input asp-for="UserName" class="form-control" placeholder="Enter email address" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label fw-bold"></label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="PasswordHash" class="form-label fw-bold"></label>
+                            <input asp-for="PasswordHash" class="form-control" placeholder="Enter password" type="password" />
+                            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                        </div>
+
+                       
+
+                        <div class="d-flex justify-content">
+                            <button type="submit" class="btn btn-success px-4">Register</button>
+                        </div>
+                    </form>
+                    <div class="mt-3 text-center">
+                        <span>Do have an account</span>
+                        <a asp-action="signin" asp-controller="Register">Sign in</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
