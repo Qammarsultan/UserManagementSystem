@@ -33,12 +33,12 @@ namespace UserManagementSystem.Repository
         {
             var res =  _context.Registers.FirstOrDefault(u => u.Email == userRegister.Email);
               if (res == null)  return null;
-            var passworkCheck = await _context.Registers.AnyAsync(u => u.PasswordHash == userRegister.PasswordHash);
-             if (!passworkCheck)
+            var passwordCheck = await _context.Registers.AnyAsync(u => u.PasswordHash == userRegister.PasswordHash);
+             if (!passwordCheck)
                 return null;
 
 
-            var token = CreateToken(userRegister);
+            var token = CreateToken(res);
             return token;
 
         }

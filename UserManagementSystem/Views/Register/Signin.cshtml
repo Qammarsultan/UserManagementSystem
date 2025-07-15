@@ -13,7 +13,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-M6k3e2skx5/..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
-
+@if (ViewBag.LoginError != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.LoginError
+    </div>
+}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">

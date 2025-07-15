@@ -1,6 +1,7 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using UserManagementSystem.Data;
 using UserManagementSystem.Interface;
 using UserManagementSystem.Models;
@@ -51,6 +52,8 @@ namespace UserManagementSystem.Repository
             return 1;
         }
 
+
+
         public async Task<IEnumerable<UserInfo>> GetUsersList()
         {
             var jwt = _httpContextAccessor.HttpContext?.Request.Cookies["jwt"];
@@ -60,10 +63,10 @@ namespace UserManagementSystem.Repository
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(jwt);
 
-            var userId = token.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-            var role = token.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
+            var role = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            var email = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(role))
+            if (string.IsNullOrEmpty(role) || string.IsNullOrEmpty(email))
                 return Enumerable.Empty<UserInfo>();
 
             if (role == "Admin")
@@ -73,10 +76,11 @@ namespace UserManagementSystem.Repository
             else
             {
                 return await _context.Users
-                    .Where(u => u.Id == int.Parse(userId))
+                    .Where(u => u.Email == email)
                     .ToListAsync();
             }
         }
+
 
         public async Task<int> DeleteUser(int Id)
         {

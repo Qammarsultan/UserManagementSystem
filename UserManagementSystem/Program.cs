@@ -1,10 +1,9 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using UserManagementSystem.Data;
-using UserManagementSystem.Identity;
 using UserManagementSystem.Interface;
 using UserManagementSystem.Middlewares;
 using UserManagementSystem.Models;
@@ -52,25 +51,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-//Add Identity for Role Base authorization
-builder.Services.AddIdentityCore<ApplicationUser>()
-    .AddRoles<ApplicationRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// Register HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 //Register Services in DI
-builder.Services.AddScoped<IUserInfo, UserManagementSystem.Repository.UserInfoRepo >();
+builder.Services.AddScoped<IUserInfo, UserInfoRepo>();
 builder.Services.AddScoped<IUserRegisterRepo, UserRegisterRepo>();
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-//seed roles 
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await DefaultRoles.SeedRolesAsync(services);
-    await DefaultUser.SeedUserAsync(services);
+    await SeedAdminUser.SeedAdminUserAsync(services);
 }
 
 // Configure the HTTP request pipeline.

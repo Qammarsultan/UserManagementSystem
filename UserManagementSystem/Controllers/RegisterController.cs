@@ -40,6 +40,7 @@ namespace UserManagementSystem.Controllers
             var token = await _registerRepo.Signin(user);
             if(token == null)
             {
+                ViewBag.LoginError = "Invalid username or password";
                 return View("Signin");
             }
 

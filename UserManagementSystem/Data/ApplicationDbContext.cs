@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using UserManagementSystem.Identity;
 using UserManagementSystem.Models;
 
 namespace UserManagementSystem.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,Guid>
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
