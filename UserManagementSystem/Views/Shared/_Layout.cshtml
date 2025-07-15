@@ -1,7 +1,4 @@
-﻿@using Microsoft.AspNetCore.Authentication
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Identity
-@using System.Security.Claims
+﻿@using System.Security.Claims
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +9,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/UserManagementSystem.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-M6k3e2skx5/..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="d-flex" id="wrapper">
@@ -31,22 +28,30 @@
         <div id="page-content-wrapper">
             <!-- Top navigation -->
             <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-                <div class="container-fluid">
-                    <button class="btn btn-primary" id="sidebarToggle"><i class="fas fa-bars"></i></button>
-                    <form class="d-none d-md-inline-block form-inline ms-auto me-2">
-                        <div class="input-group">
-                            <input class="form-control" type="text" placeholder="Search..." aria-label="Search" />
-                            <button class="btn btn-outline-secondary" type="button">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </form>
+                <div class="container-fluid d-flex align-items-center">
 
+                    <button class="btn btn-primary me-2" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <form class="d-flex me-auto" style="width: 300px;">
+                        <input class="form-control me-2" type="text" placeholder="Search..." aria-label="Search">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
 
                     @if (User.Identity?.IsAuthenticated ?? false)
                     {
+                        var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ?? "User";
+                        var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? "User";
+
                         <div class="d-flex align-items-center">
-                            <span class="me-2">Hello, <strong>@User.FindFirst(ClaimTypes.Email)?.Value</strong></span>
+                            <span class="badge bg-@(role == "Admin" ? "secondary" : "danger") text-uppercase me-2">@role</span>
+                            <span class="me-2">
+                                <strong>@email</strong>
+                            </span>
+
                             <form asp-controller="Register" asp-action="Logout" method="post" class="d-inline">
                                 <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
                             </form>
@@ -83,6 +88,7 @@
             document.getElementById("wrapper").classList.toggle("toggled");
         });
     </script>
+
     <style>
         #wrapper {
             display: flex;
